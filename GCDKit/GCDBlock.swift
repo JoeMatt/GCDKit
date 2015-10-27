@@ -38,9 +38,19 @@ public struct GCDBlock {
     */
     public init(_ closure: () -> Void) {
 
-        self.rawObject = dispatch_block_create(DISPATCH_BLOCK_INHERIT_QOS_CLASS) {
-
-            autoreleasepool(closure)
+        if #available(iOS 8.0, *) {
+            
+            self.rawObject = dispatch_block_create(DISPATCH_BLOCK_INHERIT_QOS_CLASS) {
+                
+                autoreleasepool(closure)
+            }
+        }
+        else {
+            
+            self.rawObject = {
+                
+                autoreleasepool(closure)
+            }
         }
     }
 
